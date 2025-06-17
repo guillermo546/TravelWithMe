@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../styles/ajustes.css">
+ 
+    <title>Ajustes</title>
+    <style>
+      
+        body {
+            background-color:#A0CED9;
+            margin: 0;
+            max-width: 850px;
+            margin-top: 90px;
+            margin-bottom: 100px;
+            padding-left: 30px;
+            padding-right: 30px;
+            margin-left: auto;
+            margin-right: auto; 
+        }
+        .detalles{
+            background-color: #FFC09F;
+        }
+       .añadir{
+        height: 25px;
+        cursor: pointer;
+       }
+       .tus_anuncios{
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+}
+ .imagen-perfil{
+        max-height: 200px;
+        max-width: 200px;
+    }
+    </style>
+</head>
+<body>
+    <div class="cabecera">
+        <div class="cabecera-izquierda">
+            <div class="boton-añadir">
+                <img class="añadir" src="/client/imagenes/back.png">
+            </div>
+         
+        </div>
+    </div>
+    <br><br><br><br><br><br>
+    <h2>Tu perfil actual: </h2>
+
+    <div class="detalles">
+        <h3>Tu id: </h3><label class="id"></label>
+        <h3>Tu nombre de usuario: </h3><label class="nombre"></label>
+        <h3>Edad: </h3><label class="edad"></label>
+        <h3>Género: </h3><label class="genero"></label>
+        <h3>Lugar Actual: </h3><label class="lugar_actual"></label>
+        <h3>Descripción: </h3><label class="descripcion"></label>
+        <h3>Tus gustos: </h3><label class="gustos"></label>
+        <label class="imagen_sel"></label>
+        <button class="editar">Editar</button>
+        <button class="eliminar">Eliminar Cuenta</button>
+    </div>
+    <div class="div_tus_anuncios"><label class="tus_anuncios">Consulta aquí tus anuncios</label></div>
+
+    <script>
+        const botonVolver = document.querySelector('.añadir');
+botonVolver.onclick = function(){
+    window.location.href = 'pagina_principal_anuncios.html';
+}
+const idUsuario = document.querySelector('.id');
+idUsuario.innerHTML = JSON.parse(localStorage.getItem("id_usuario"));
+
+const idUsuarioMod = JSON.parse(localStorage.getItem("id_usuario"));
+
+const nombre = document.querySelector('.nombre');
+nombre.innerHTML = localStorage.getItem('nombre_usuario');
+
+  const edad = document.querySelector('.edad');
+  const genero = document.querySelector('.genero');
+  const lugar_actual = document.querySelector('.lugar_actual');
+  const descripcion = document.querySelector('.descripcion');
+  const gustos = document.querySelector('.gustos');
+ const imagen = document.querySelector('.imagen_sel');
+
+  fetch('http://localhost:5000/obtenerPerfil', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id:idUsuarioMod })
+        }).then(response => response.json()).then(data => {
+            console.log(data);
+            if(data.data instanceof Object){
+                edad.innerHTML = data.data.edad;
+                genero.innerHTML = data.data.genero;
+                lugar_actual.innerHTML = data.data.lugar_actual;
+                descripcion.innerHTML = data.data.descripcion;
+                gustos.innerHTML = data.data.aficiones;
+                imagen.innerHTML = `<img class="imagen-perfil" src="../imagenes/${data.data.imagen}">`;
+                
+                localStorage.setItem('nombre_imagen_original', data.data.imagen);
+            }
+            else{
+                edad.innerHTML = 0;
+                genero.innerHTML = 'Sin definir';
+                lugar_actual.innerHTML = 'Sin definir';
+                descripcion.innerHTML = 'Sin definir';
+               gustos.innerHTML = 'Sin definir';
+            }   
+        });
+
+const editarBtn = document.querySelector('.editar');
+const botonEliminar = document.querySelector('.eliminar');
+editarBtn.onclick = function(){
+    editarBtn.style.visibility = "hidden";
+    botonEliminar.style.visibility = "hidden";
+
+    const imagen_seleccion = document.querySelector('.imagen_sel');
+    imagen_seleccion.innerHTML = '<h4>Cambiar tu foto de perfil: <h4><input type="file" id="imagen" accept="image/*" required />';
+        
+     
+    const div = document.querySelector('.detalles');
+
+    const div2 = div.innerHTML;
+    const edad2 = edad.innerHTML;
+    const genero2 = genero.innerHTML;
+    const lugar_actual2 = lugar_actual.innerHTML;
+    const descripcion2 = descripcion.innerHTML;
+    const gustos2 = gustos.innerHTML;
+
+    edad.innerHTML = `<input id='edad_input' value='${edad2}'>`;
+    genero.innerHTML = `<input id='genero_input' value='${genero2}'>`;
+    lugar_actual.innerHTML = `<input id='lugar_actual_input' value='${lugar_actual2}'>`;
+    descripcion.innerHTML = `<input id='descripcion_input' value='${descripcion2}'>`;
+    gustos.innerHTML = `<input id='gustos_input' value='${gustos2}'>`;
+
+    div.innerHTML = div.innerHTML + "<button id='guardar'>Guardar Cambios</button><label>  </label><button class='cancelar'>Cancelar</button>";
+
+    const cancelarBtn = document.querySelector('.cancelar');
+    cancelarBtn.onclick = function(){
+        div.innerHTML = div2;
+         location.reload();
+    }
+
+  document.getElementById("guardar").addEventListener("click", async function () {
+     const edadInput = document.getElementById('edad_input');
+     const edad = edadInput.value;
+ 
+     const descripcionInput = document.getElementById('descripcion_input');
+     const descripcion = descripcionInput.value;
+ 
+     const generoInput = document.getElementById('genero_input');
+     const genero = generoInput.value;  
+ 
+     const gustosInput = document.getElementById('gustos_input');
+     const gustos = gustosInput.value;
+ 
+     const lugar_actualInput = document.getElementById('lugar_actual_input');
+     const lugarActual = lugar_actualInput.value;
+ 
+    const input = document.getElementById("imagen");
+     
+     if (!input.files[0]) {  
+        fetch('http://localhost:5000/actualizar_perfil',{
+        method: 'PATCH',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: parseInt(idUsuarioMod),
+            edad: edad,
+            genero: genero,
+            lugar_actual: lugarActual,
+            descripcion: descripcion,
+            gustos: gustos,
+            imagen:localStorage.getItem('nombre_imagen_original')
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            location.reload();
+        }
+    })
+      }
+      else{
+          const archivo_original = input.files[0];
+          const nuevo_nombre = Date.now() + '-' + archivo_original.name;
+ 
+          const archivo_modificado = new File([archivo_original], nuevo_nombre, {
+      type: archivo_original.type
+       });
+
+      const formData = new FormData();
+      formData.append("imagen", archivo_modificado);
+      
+      const respuesta = await fetch("http://localhost:5000/subirImagen", {
+          method: "POST",
+          body: formData
+        });
+        
+        const data = await respuesta.json();
+        
+        fetch('http://localhost:5000/actualizar_perfil',{
+        method: 'PATCH',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: parseInt(idUsuarioMod),
+            edad: edad,
+            genero: genero,
+            lugar_actual: lugarActual,
+            descripcion: descripcion,
+            gustos: gustos,
+            imagen:nuevo_nombre
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            location.reload();
+        }
+    })
+    
+}
+});
+}
+
+    </script>
+    <script src="../scripts/modificar_perfil.js"></script>
+
+</body>
+</html>

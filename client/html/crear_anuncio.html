@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../styles/cabecera.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Anuncio</title>
+    
+    <style>
+         body{
+            background-color:#A0CED9;
+              display: flex;
+            justify-content: center;
+          margin: auto;
+            width: 50%;
+            height: 50%;
+            padding: 100px;
+        }
+       
+        input{
+            width: 45%;
+        }
+      
+        p,h1,h2 {
+        color: #020200;
+        margin: 0;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        
+        button{
+            color: #110f06;
+            width: 35%;
+            background-color: #FFC09F;
+            border: 1px solid #FFC09F;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+        }
+  .volver, .ajustes{
+        cursor: pointer;
+        height: 50px;
+        width: 50px;
+    }
+    button{
+        cursor:pointer;
+    }
+    </style>
+</head>
+
+<body>
+     <div class="cabecera">
+        <div class="cabecera-izquierda">
+            <div class="boton-añadir">
+                <img class="volver" src="/client/imagenes/back.png">
+            </div>
+            <a href="pagina_principal_anuncios.html" class="link-cabecera">
+                <img class="logo" src="">
+            </a>
+        </div>
+        
+        <div class="cabecera-derecha">
+            <div>
+                   <img class="ajustes" src="/client/imagenes/ajustes.png">        
+            </div>
+
+        </div>
+    </div>
+    <br><br><br><br><br><br>
+    <div id="datos">
+
+        <label>Título: </label><input type="text" id="titulo">
+        <br><br><br>
+        <label>Descripción: </label><input type="text" id="descripcion">
+        <br><br><br>
+        <h4>Adjunte si lo desea una imagen haciendo click en el botón de debajo:</h4>
+       
+        <input type="file" id="imagen" accept="image/*" required />
+        
+        <br><br><br>
+        <label>Fecha De Inicio: </label><input type="date" id="fecha_inicio">
+        <br><br><br>
+        <label>Fecha De Fin: </label><input type="date" id="fecha_fin">
+        <br><br><br>
+        <button id="boton-add">Añadir</button>
+        
+        <label id="texto"></label>
+    </div>
+    <script>
+      
+      document.getElementById("boton-add").addEventListener("click", async function () {
+     const tituloInput = document.getElementById('titulo');
+     const titulo = tituloInput.value;
+     localStorage.setItem('titulo', titulo);
+ 
+     const descripcionInput = document.getElementById('descripcion');
+     const descripcion = descripcionInput.value;
+     localStorage.setItem('descripcion', descripcion);
+ 
+     const fechaInicioInput = document.getElementById('fecha_inicio');
+     const fecha_inicio = fechaInicioInput.value;  
+     localStorage.setItem('fecha1', fecha_inicio);
+ 
+     const fechaFinInput = document.getElementById('fecha_fin');
+     const fecha_fin = fechaFinInput.value;
+     localStorage.setItem('fecha2', fecha_fin);
+ 
+    const input = document.getElementById("imagen");
+     
+     if (!input.files[0]) {
+       alert("Selecciona una imagen primero");
+       return;
+      }
+      const archivo_original = input.files[0];
+      const nuevo_nombre = Date.now() + '-' + archivo_original.name;
+ 
+      const archivo_modificado = new File([archivo_original], nuevo_nombre, {
+      type: archivo_original.type
+       });
+ 
+       localStorage.setItem('imagen_nombre', nuevo_nombre);
+
+      const formData = new FormData();
+      formData.append("imagen", archivo_modificado);
+
+        const respuesta = await fetch("http://localhost:5000/subirImagen", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await respuesta.json();
+   });
+   
+  </script>
+    <script src="../scripts/crear_anuncio.js"></script>
+</body>
+</html>

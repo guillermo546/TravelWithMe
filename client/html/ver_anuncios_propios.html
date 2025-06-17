@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../styles/cabecera.css">
+    <link rel="stylesheet" href="../styles/anuncios.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <style>
+        button{
+            cursor: pointer;
+        }
+  body{
+        background-color:#A0CED9;
+      }
+    .tabla-anuncios {
+         display: grid;
+         grid-template-columns: 2fr;
+         row-gap: 50px;
+    }
+  
+    .añadir, .ajustes{
+        cursor: pointer;
+        height: 50px;
+        width: 50px;
+    }
+    .chats-imagen{
+        cursor: pointer;
+        height:50px;
+        background-color: none;
+        box-sizing: border-box; 
+    }
+     .chats-imagen{
+        cursor: pointer;
+        height:50px;
+        background-color: none;
+        box-sizing: border-box; 
+    }
+      .editar,.guardar,.cancelar,.eliminar{
+        font-size: medium;
+            color: #110f06;
+            width: 35%;
+            background-color: #FFC09F;
+            border: 1px solid #FFC09F;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+        }
+        .botones{
+            display: flex;
+            justify-content: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="cabecera">
+        <div class="cabecera-izquierda">
+            <div class="boton-añadir">
+                <button class="añadir"><img  class="añadir-imagen" src="/client/imagenes/boton-mas.png"></button>
+            </div>
+            <a href="pagina_principal_anuncios.html" class="link-cabecera">
+                <img class="logo" src="">
+            </a>
+        </div>
+        
+        <div class="cabecera-centro">
+            <input class="barra-de-busqueda" type="text" placeholder="Búsqueda">
+            <button class="boton-busqueda">
+                <img class="icono-busqueda" src="../imagenes/search-icon.png">
+            </button>
+        </div>
+        
+        <div class="cabecera-derecha">
+            <div class="boton-chats">
+                <button class="chats"><img  class="chats-imagen" src="/client/imagenes/escribir.png"></button>
+            </div>
+            
+            <div class="boton-ajustes">
+                   <button class="ajustes"><img class="ajustes-imagen" src="/client/imagenes/ajustes.png"></button>                  
+            </div>
+
+        </div>
+    </div>
+
+    <div class="main">
+        <div id="tabla-anuncios">
+            
+        </div>
+      </div>
+      <script>
+              const id = localStorage.getItem('id_usuario');
+    fetch('http://localhost:5000/obtenerAnunciosPorIdUsuario',{
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            idUsuario:id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+       
+        cargarTablaAnuncios(data['data'])
+    })
+
+
+function cargarTablaAnuncios(data){
+    let anunciosHTML = '';
+    const tabla = document.querySelector('#tabla-anuncios');
+    let i = 0;
+    if(data.length === 0){
+        tabla.innerHTML = "No hay anuncios que mostrar";
+        return;
+    }
+    data.forEach((anuncio) => {
+
+        anunciosHTML += `
+        <style>  .anuncio-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: white;
+  border: 2px dotted black;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.anuncio {
+  flex: 1 1 300px;
+  max-width: 350px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.anuncio div {
+  font-family: Roboto, Arial;
+  font-size: 14px;
+  color: #333;
+}
+
+.imagen-anuncio {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.iniciar-conversacion {
+  margin-top: 10px;
+  padding: 8px;
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.icono-iniciar-conversacion {
+  width: 20px;
+  height: 20px;
+  background-color: none;
+}
+  .iniciar-conversacion{
+        background-color:white;
+  }
+
+.nombre_autor{
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+}
+.idUsuario{
+      display:none;
+}
+  
+    </style>
+    
+        <div class="anuncio-container">
+            <div class="anuncio${anuncio.id}">
+             <div class="idUsuario">${anuncio.IdUsuario}</div>
+             <div class="idAnuncio" >
+                Id: <label class="id-anuncio${anuncio.id}">${anuncio.id}</label>
+            </div>
+             <div class="titulo-anuncio">
+                Título: <label class="titulo${anuncio.id}">${anuncio.titulo}</label>
+            </div>
+       
+            <div class="descripcion">
+                Descripción: <label class="descripcion-anuncio${anuncio.id}">${anuncio.descripcion}</label>
+            </div>
+            <div class="fecha-inicio">
+            Fecha de inicio: <label class="fecha_inicio_anuncio${anuncio.id}">${new Date(anuncio.fecha_inicio).toLocaleDateString()}</label>
+            </div>
+            <div class="fecha-fin">
+                Fecha de fin: <label class="fecha_fin_anuncio${anuncio.id}">${new Date(anuncio.fecha_fin).toLocaleDateString()}</label>
+            </div>
+            <div class="contenedor-imagen-anuncio">
+                
+                <img class="imagen-anuncio${anuncio.id}" data-nombre="${anuncio.imagen}" src="../imagenes/${anuncio.imagen}" style="width: 250px; height: auto;">
+                </div>
+            
+                  <button class="editar" data-id="${anuncio.id}">Editar Anuncio</button>
+            </div>
+               
+             <div class="separador-anuncio"></div></div>
+        `;
+      });
+ 
+    tabla.innerHTML = anunciosHTML;
+    
+    const x = document.querySelector('#tabla-anuncios');
+    const botones = x.querySelectorAll('.editar');
+    
+     botones.forEach(boton => {
+            boton.addEventListener('click', (e) => {
+                
+                const id = e.target.dataset.id;
+              
+                const anuncio = document.querySelector('.anuncio'+id);
+
+                
+                const titulo = anuncio.querySelector('.titulo'+id).innerHTML;
+                const descripcion = anuncio.querySelector('.descripcion-anuncio'+id).innerHTML;
+
+                let fecha_inicio = anuncio.querySelector('.fecha_inicio_anuncio'+id).innerHTML;
+                const fecha_inicio2 = fecha_inicio.split('/');
+
+                if(parseInt(fecha_inicio2[1]) < 10){
+                    fecha_inicio2[1] = '0'+fecha_inicio2[1];
+                }
+                
+                if(parseInt(fecha_inicio2[0]) < 10){
+                    fecha_inicio2[0] = '0'+fecha_inicio2[0];
+                }
+
+                const fecha_inicio3 = fecha_inicio2[2] +'-'+ fecha_inicio2[1] +'-'+ fecha_inicio2[0];
+
+                let fecha_fin = anuncio.querySelector('.fecha_fin_anuncio'+id).innerHTML;
+                const fecha_fin2 = fecha_fin.split('/');
+                const fecha_fin3 = fecha_fin2[2] +'-0'+ fecha_fin2[1] +'-0'+ fecha_fin[0];
+                 if(parseInt(fecha_fin2[1]) < 10){
+                    fecha_fin2[1] = '0'+fecha_fin2[1];
+                }
+                
+                if(parseInt(fecha_fin2[0]) < 10){
+                    fecha_fin2[0] = '0'+fecha_fin2[0];
+                }
+                let nombre_imagen = document.querySelector('.imagen-anuncio'+id);
+                nombre_imagen = nombre_imagen.dataset.nombre;
+
+                    anuncio.innerHTML = `
+                    <div class="anuncio">
+             <div class="idUsuario">${anuncio.IdUsuario}</div>
+             <div class="idAnuncio" ">
+                Id: ${id}
+            </div>
+             <div class="titulo-anuncio">
+                Título: <input class="input-titulo" value="${titulo}">
+            </div>
+             
+            <div class="descripcion">
+                Descripción: <input class="input-descripcion" value="${descripcion}">
+            </div>
+            <div class="fecha-inicio">
+            Fecha de inicio:  <input class="input-fecha_inicio" type="date" value="${fecha_inicio3}">
+            </div>
+            <div class="fecha-fin">
+                Fecha de fin: <input class="input-fecha_fin" type="date" value="${fecha_fin3}">
+            </div>
+            <div class="contenedor-imagen-anuncio">
+                <h4>Para modificar la imagen, seleccione una nueva:</h4>
+                <input type="file" id="imagen" accept="image/*" required />
+                <img class="imagen-anuncio" src="../imagenes/${nombre_imagen}">
+                </div>
+                 
+            </div>
+            <div class="botones">
+            <button class="eliminar">Eliminar Anuncio</button>
+            <button class="guardar">Guardar Cambios</button>
+            <button class="cancelar">Cancelar</button>
+            </div>
+                `;
+                const cancelar_boton = document.querySelector('.cancelar');
+                cancelar_boton.onclick = function(){
+                    location.reload();
+                }
+                const boton_eliminar = document.querySelector('.eliminar');
+                boton_eliminar.onclick = function(){
+                    fetch('http://localhost:5000/eliminarAnuncio/' +id , {method: 'DELETE'})
+                    .then(response => response.json()).then(data => {
+                            location.reload();       
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                   
+                }
+
+                document.querySelector('.guardar').addEventListener("click", async function () {
+                    const titulo_input = document.querySelector('.input-titulo');
+                        const descripcion_input = document.querySelector('.input-descripcion');
+                        const fecha_inicio_input = document.querySelector('.input-fecha_inicio').value;
+                       
+                        const fecha_fin_input = document.querySelector('.input-fecha_fin').value;
+
+                        const input = document.getElementById("imagen");
+
+                        if(!input.files[0]){
+                            fetch('http://localhost:5000/actualizar_anuncio',{
+                            method: 'PATCH',
+                            headers: {
+                                'Content-type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: id,
+                                titulo:titulo_input.value,
+                                descripcion:descripcion_input.value,
+                                fecha_inicio:fecha_inicio_input,
+                                fecha_fin:fecha_fin_input,
+                                imagen:nombre_imagen                            
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success){
+                                location.reload();
+                            }
+                        })
+
+                        }
+                        else{
+                            const archivo_original = input.files[0];
+                            const nuevo_nombre = Date.now() + '-' + archivo_original.name;
+                    
+                            const archivo_modificado = new File([archivo_original], nuevo_nombre, {
+                            type: archivo_original.type
+                            });
+
+                        const formData = new FormData();
+                        formData.append("imagen", archivo_modificado);
+                        console.log(nuevo_nombre)
+                        const respuesta = await fetch("http://localhost:5000/subirImagen", {
+                            method: "POST",
+                            body: formData
+                            });
+                            
+                            const data = await respuesta.json();
+
+                            fetch('http://localhost:5000/actualizar_anuncio',{
+                            method: 'PATCH',
+                            headers: {
+                                'Content-type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                id: id,
+                                titulo:titulo_input.value,
+                                descripcion:descripcion_input.value,
+                                fecha_inicio:fecha_inicio_input,
+                                fecha_fin:fecha_fin_input,
+                                imagen:nuevo_nombre                           
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success){
+                                //location.reload();
+                            }
+                        })
+                        }
+                });
+
+                        
+                    
+
+                
+         
+            });
+          });       
+        }
+      </script>
+      <script src="../scripts/ver_anuncios_propios.js"></script>
+</body>
+</html>

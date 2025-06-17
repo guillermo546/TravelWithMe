@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../styles/cabecera.css">
+    <link rel="stylesheet" href="../styles/anuncios.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <style>
+      body{
+        background-color:#A0CED9;
+      }
+    .tabla-anuncios {
+         display: grid;
+         grid-template-columns: 2fr;
+         row-gap: 50px;
+    }
+    .contenedor-imagen-anuncio{
+        max-height: 200px;
+        max-width: 200px;
+    }
+    .añadir, .ajustes{
+        
+        cursor: pointer;
+        height: 50px;
+        width: 50px;
+    }
+    .chats-imagen{
+        cursor: pointer;
+        height:50px;
+        background-color: none;
+        box-sizing: border-box; 
+    }
+    </style>
+</head>
+<body>
+    <div class="cabecera">
+        <div class="cabecera-izquierda">
+            <div class="boton-añadir">
+                <button class="añadir"><img  class="añadir-imagen" src="/client/imagenes/boton-mas.png"></button>
+            </div>
+            
+            <a href="pagina_principal_anuncios.html" class="link-cabecera">
+                <img class="logo" src="">
+            </a>
+            
+        </div>
+        
+        <div class="cabecera-centro">
+            <input class="barra-de-busqueda" type="text" placeholder="Búsqueda">
+            <button class="boton-busqueda">
+                <img class="icono-busqueda" src="../imagenes/search-icon.png">
+            </button>
+        </div>
+        
+        <div class="cabecera-derecha">
+            <div class="boton-chats">
+                <button class="chats"><img  class="chats-imagen" src="/client/imagenes/escribir.png"></button>
+            </div>
+            
+            <div class="boton-ajustes">
+                   <button class="ajustes"><img class="ajustes-imagen" src="/client/imagenes/ajustes.png"></button>                  
+            </div>
+
+        </div>
+    </div>
+
+    <div class="main">
+        <div id="tabla-anuncios">
+            
+        </div>
+      </div>
+
+      <script src="../scripts/pagina_principal_anuncios.js"></script>
+</body>
+</html>

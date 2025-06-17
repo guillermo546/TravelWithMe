@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Inicio de Sesión</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body{
+            background-color:#A0CED9;
+        }
+        .inicio {
+          margin: auto;
+            width: 50%;
+            height: 50%;
+            padding: 10px;
+        }
+        input{
+            width: 50%;
+        }
+        .inicio2, .inicio3{
+            margin: auto;
+            width: 50%;
+            height: 50%;
+            padding: 10px;
+            border: 1px solid whitesmoke;
+        }
+      
+        p,h1,h2 {
+        color: #020200;
+        margin: 0;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        
+        button{
+            color: #110f06;
+            width: 35%;
+            background-color: #FFC09F;
+            border: 1px solid #FFC09F;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+        }
+        
+    </style>
+    </head>
+    <body>
+        
+            <div class="inicio">
+                <div class="inicio2">
+                <h1>Inicio de Sesión</h1>
+                <p>Nombre de usuario: </p><input class="nombre1">
+                <p>Contraseña: </p><input type="password" class="contraseña1"> 
+                <br><br>
+                <button id="iniciar_sesion">Acceder</button>
+                </div>
+               
+           <br>
+           <div class="inicio3">
+            
+            <h2>Si no posee una cuenta, puede registrarse: </h2>
+                <p>Nombre de usuario: </p><input class="nombre2">
+                <p>Correo electrónico: </p><input class="correo">
+                <p>Contraseña: </p><input type="password" class="contraseña2">
+                <p>Repita la Contraseña: </p><input type="password" class="repetir_contraseña"> <br><br>
+                <button id="registro">Registrarse</button>
+                <p class="registro_correcto"></p>
+
+           </div>
+
+            </div>
+          
+            <script src="../scripts/inicio_sesion.js"></script>
+    </body>
+</html>

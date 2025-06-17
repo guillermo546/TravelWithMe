@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      .titulo{
+        display: flex;
+        justify-content: center;
+        margin: auto;
+            width: 50%;
+            height: 50%;
+      }
+       .enviar{
+        display: flex;
+        justify-content: center;
+        margin: auto;
+            width: 5%;
+            height: 50%;
+            color: #110f06;
+            background-color: #FFC09F;
+            border: 1px solid #FFC09F;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+      }
+      input{
+        display: flex;
+        justify-content: center;
+        margin: auto;
+            width: 25%;
+            height: 50%;
+      }
+      .main{
+        
+        display: flex;
+        justify-content: center;
+         margin: auto;
+            width: 50%;
+            height: 50%;
+      }
+      body{
+        background-color:#A0CED9;
+      }
+    </style>
+</head>
+<body>
+  <label class="titulo"></label>
+     <div class="main">
+        <div id="tabla-mensajes">
+            
+        </div>
+        <br>
+      </div>
+      <input placeholder="Mensaje..." id="mensaje"><button class="enviar">Enviar</button>
+    <script src="../scripts/chat.js"></script>
+</body>
+</html>
